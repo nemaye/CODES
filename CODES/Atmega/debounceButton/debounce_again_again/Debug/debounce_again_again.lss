@@ -1,0 +1,218 @@
+
+debounce_again_again.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000d2  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000126  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000126  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000158  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000020  00000000  00000000  00000194  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   000005ec  00000000  00000000  000001b4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000056a  00000000  00000000  000007a0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000217  00000000  00000000  00000d0a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000024  00000000  00000000  00000f24  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000002f0  00000000  00000000  00000f48  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000000e8  00000000  00000000  00001238  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000010  00000000  00000000  00001320  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 36 00 	call	0x6c	; 0x6c <main>
+  64:	0c 94 67 00 	jmp	0xce	; 0xce <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <main>:
+#include <util/delay.h>
+
+int main(void)
+{
+    /* Replace with your application code */
+    DDRD &= ~(1<<PIND7);		//D7 as input(button)
+  6c:	8f 98       	cbi	0x11, 7	; 17
+	DDRB |= 1<<PINB3;			//B3 as output(led)
+  6e:	bb 9a       	sbi	0x17, 3	; 23
+	PORTD |= 1<<PIND7;
+  70:	97 9a       	sbi	0x12, 7	; 18
+	
+	int pressed=0;
+	int released=0;
+	int p=0,r=0;
+  72:	20 e0       	ldi	r18, 0x00	; 0
+  74:	30 e0       	ldi	r19, 0x00	; 0
+
+	while (1) 
+    {
+	//	if(bit_is_clear(PIND,7))
+			{
+				p++;
+  76:	81 e0       	ldi	r24, 0x01	; 1
+  78:	90 e0       	ldi	r25, 0x00	; 0
+    /* Replace with your application code */
+    DDRD &= ~(1<<PIND7);		//D7 as input(button)
+	DDRB |= 1<<PINB3;			//B3 as output(led)
+	PORTD |= 1<<PIND7;
+	
+	int pressed=0;
+  7a:	40 e0       	ldi	r20, 0x00	; 0
+  7c:	50 e0       	ldi	r21, 0x00	; 0
+//		else
+			{
+				r++;
+				if(r>100)
+				{
+					pressed=0;
+  7e:	a0 e0       	ldi	r26, 0x00	; 0
+  80:	f0 e0       	ldi	r31, 0x00	; 0
+				p++;
+				if(p>100)
+				{
+					if(pressed==0)
+					{
+						PORTB ^= 1<<PORTB3;
+  82:	e8 e0       	ldi	r30, 0x08	; 8
+						pressed=1;	
+  84:	71 e0       	ldi	r23, 0x01	; 1
+  86:	60 e0       	ldi	r22, 0x00	; 0
+  88:	14 c0       	rjmp	.+40     	; 0xb2 <main+0x46>
+
+	while (1) 
+    {
+	//	if(bit_is_clear(PIND,7))
+			{
+				p++;
+  8a:	01 96       	adiw	r24, 0x01	; 1
+				if(p>100)
+  8c:	85 36       	cpi	r24, 0x65	; 101
+  8e:	91 05       	cpc	r25, r1
+  90:	84 f0       	brlt	.+32     	; 0xb2 <main+0x46>
+				{
+					if(pressed==0)
+  92:	41 15       	cp	r20, r1
+  94:	51 05       	cpc	r21, r1
+  96:	59 f4       	brne	.+22     	; 0xae <main+0x42>
+  98:	02 c0       	rjmp	.+4      	; 0x9e <main+0x32>
+			{
+				r++;
+				if(r>100)
+				{
+					pressed=0;
+					r=0;	
+  9a:	20 e0       	ldi	r18, 0x00	; 0
+  9c:	30 e0       	ldi	r19, 0x00	; 0
+				p++;
+				if(p>100)
+				{
+					if(pressed==0)
+					{
+						PORTB ^= 1<<PORTB3;
+  9e:	88 b3       	in	r24, 0x18	; 24
+  a0:	8e 27       	eor	r24, r30
+  a2:	88 bb       	out	0x18, r24	; 24
+						pressed=1;	
+					}
+					p=0;
+  a4:	80 e0       	ldi	r24, 0x00	; 0
+  a6:	90 e0       	ldi	r25, 0x00	; 0
+				if(p>100)
+				{
+					if(pressed==0)
+					{
+						PORTB ^= 1<<PORTB3;
+						pressed=1;	
+  a8:	47 2f       	mov	r20, r23
+  aa:	56 2f       	mov	r21, r22
+  ac:	02 c0       	rjmp	.+4      	; 0xb2 <main+0x46>
+					}
+					p=0;
+  ae:	80 e0       	ldi	r24, 0x00	; 0
+  b0:	90 e0       	ldi	r25, 0x00	; 0
+				}
+			}
+//		else
+			{
+				r++;
+  b2:	2f 5f       	subi	r18, 0xFF	; 255
+  b4:	3f 4f       	sbci	r19, 0xFF	; 255
+				if(r>100)
+  b6:	25 36       	cpi	r18, 0x65	; 101
+  b8:	31 05       	cpc	r19, r1
+  ba:	3c f3       	brlt	.-50     	; 0x8a <main+0x1e>
+
+	while (1) 
+    {
+	//	if(bit_is_clear(PIND,7))
+			{
+				p++;
+  bc:	01 96       	adiw	r24, 0x01	; 1
+				if(p>100)
+  be:	85 36       	cpi	r24, 0x65	; 101
+  c0:	91 05       	cpc	r25, r1
+  c2:	5c f7       	brge	.-42     	; 0x9a <main+0x2e>
+			{
+				r++;
+				if(r>100)
+				{
+					pressed=0;
+					r=0;	
+  c4:	20 e0       	ldi	r18, 0x00	; 0
+  c6:	30 e0       	ldi	r19, 0x00	; 0
+//		else
+			{
+				r++;
+				if(r>100)
+				{
+					pressed=0;
+  c8:	4a 2f       	mov	r20, r26
+  ca:	5f 2f       	mov	r21, r31
+  cc:	f2 cf       	rjmp	.-28     	; 0xb2 <main+0x46>
+
+000000ce <_exit>:
+  ce:	f8 94       	cli
+
+000000d0 <__stop_program>:
+  d0:	ff cf       	rjmp	.-2      	; 0xd0 <__stop_program>
